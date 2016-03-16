@@ -8,7 +8,7 @@ rules Declarations ::= Declaration ";" Declarations
 rules Declaration ::= Var_declaration
              | Fun_declaration;
 
-rules Var_declaration ::= "var" Ident Array_dimensions ";" Type;
+rules Var_declaration ::= "var" Ident Array_dimensions ":" Type;
 
 rules Type ::= "int"
       | "real"
@@ -17,7 +17,7 @@ rules Type ::= "int"
 rules Array_dimensions ::= "[" Expr "]" Array_dimensions
              |;
 
-rules Fun_declaration ::= "fun" Ident Param_list ";" Type  
+rules Fun_declaration ::= "fun" Ident Param_list ":" Type  
                                             "{" Fun_block "}";
 
 rules Fun_block ::= Declarations Fun_body; 
@@ -30,7 +30,7 @@ rules Parameters ::= Basic_declaration More_parameters
 rules More_parameters ::= ","  Basic_declaration More_parameters
             |;
 
-rules Basic_declaration ::= Ident Basic_array_dimensions ";" Type;
+rules Basic_declaration ::= Ident Basic_array_dimensions ":" Type;
 
 rules Basic_array_dimensions ::= "[" "]" Basic_array_dimensions
              |;

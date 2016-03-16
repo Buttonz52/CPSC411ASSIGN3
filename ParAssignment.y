@@ -52,40 +52,41 @@ import ErrM
   ',' { PT _ (TS _ 6) }
   '-' { PT _ (TS _ 7) }
   '/' { PT _ (TS _ 8) }
-  ':=' { PT _ (TS _ 9) }
-  ';' { PT _ (TS _ 10) }
-  '<' { PT _ (TS _ 11) }
-  '=' { PT _ (TS _ 12) }
-  '=<' { PT _ (TS _ 13) }
-  '>' { PT _ (TS _ 14) }
-  '>=' { PT _ (TS _ 15) }
-  '[' { PT _ (TS _ 16) }
-  ']' { PT _ (TS _ 17) }
-  'begin' { PT _ (TS _ 18) }
-  'bool' { PT _ (TS _ 19) }
-  'ceil' { PT _ (TS _ 20) }
-  'do' { PT _ (TS _ 21) }
-  'else' { PT _ (TS _ 22) }
-  'end' { PT _ (TS _ 23) }
-  'false' { PT _ (TS _ 24) }
-  'float' { PT _ (TS _ 25) }
-  'floor' { PT _ (TS _ 26) }
-  'fun' { PT _ (TS _ 27) }
-  'if' { PT _ (TS _ 28) }
-  'int' { PT _ (TS _ 29) }
-  'not' { PT _ (TS _ 30) }
-  'print' { PT _ (TS _ 31) }
-  'read' { PT _ (TS _ 32) }
-  'real' { PT _ (TS _ 33) }
-  'return' { PT _ (TS _ 34) }
-  'size' { PT _ (TS _ 35) }
-  'then' { PT _ (TS _ 36) }
-  'true' { PT _ (TS _ 37) }
-  'var' { PT _ (TS _ 38) }
-  'while' { PT _ (TS _ 39) }
-  '{' { PT _ (TS _ 40) }
-  '||' { PT _ (TS _ 41) }
-  '}' { PT _ (TS _ 42) }
+  ':' { PT _ (TS _ 9) }
+  ':=' { PT _ (TS _ 10) }
+  ';' { PT _ (TS _ 11) }
+  '<' { PT _ (TS _ 12) }
+  '=' { PT _ (TS _ 13) }
+  '=<' { PT _ (TS _ 14) }
+  '>' { PT _ (TS _ 15) }
+  '>=' { PT _ (TS _ 16) }
+  '[' { PT _ (TS _ 17) }
+  ']' { PT _ (TS _ 18) }
+  'begin' { PT _ (TS _ 19) }
+  'bool' { PT _ (TS _ 20) }
+  'ceil' { PT _ (TS _ 21) }
+  'do' { PT _ (TS _ 22) }
+  'else' { PT _ (TS _ 23) }
+  'end' { PT _ (TS _ 24) }
+  'false' { PT _ (TS _ 25) }
+  'float' { PT _ (TS _ 26) }
+  'floor' { PT _ (TS _ 27) }
+  'fun' { PT _ (TS _ 28) }
+  'if' { PT _ (TS _ 29) }
+  'int' { PT _ (TS _ 30) }
+  'not' { PT _ (TS _ 31) }
+  'print' { PT _ (TS _ 32) }
+  'read' { PT _ (TS _ 33) }
+  'real' { PT _ (TS _ 34) }
+  'return' { PT _ (TS _ 35) }
+  'size' { PT _ (TS _ 36) }
+  'then' { PT _ (TS _ 37) }
+  'true' { PT _ (TS _ 38) }
+  'var' { PT _ (TS _ 39) }
+  'while' { PT _ (TS _ 40) }
+  '{' { PT _ (TS _ 41) }
+  '||' { PT _ (TS _ 42) }
+  '}' { PT _ (TS _ 43) }
 
 L_ident  { PT _ (TV $$) }
 L_Ival { PT _ (T_Ival $$) }
@@ -109,7 +110,7 @@ Declaration :: { Declaration }
 Declaration : Var_declaration { AbsAssignment.DeclarationVar_declaration $1 }
             | Fun_declaration { AbsAssignment.DeclarationFun_declaration $1 }
 Var_declaration :: { Var_declaration }
-Var_declaration : 'var' Ident Array_dimensions ';' Type { AbsAssignment.Var_declaration1 $2 $3 $5 }
+Var_declaration : 'var' Ident Array_dimensions ':' Type { AbsAssignment.Var_declaration1 $2 $3 $5 }
 Type :: { Type }
 Type : 'int' { AbsAssignment.Type_int }
      | 'real' { AbsAssignment.Type_real }
@@ -118,7 +119,7 @@ Array_dimensions :: { Array_dimensions }
 Array_dimensions : '[' Expr ']' Array_dimensions { AbsAssignment.Array_dimensions1 $2 $4 }
                  | {- empty -} { AbsAssignment.Array_dimensions2 }
 Fun_declaration :: { Fun_declaration }
-Fun_declaration : 'fun' Ident Param_list ';' Type '{' Fun_block '}' { AbsAssignment.Fun_declaration1 $2 $3 $5 $7 }
+Fun_declaration : 'fun' Ident Param_list ':' Type '{' Fun_block '}' { AbsAssignment.Fun_declaration1 $2 $3 $5 $7 }
 Fun_block :: { Fun_block }
 Fun_block : Declarations Fun_body { AbsAssignment.Fun_block1 $1 $2 }
 Param_list :: { Param_list }
@@ -130,7 +131,7 @@ More_parameters :: { More_parameters }
 More_parameters : ',' Basic_declaration More_parameters { AbsAssignment.More_parameters1 $2 $3 }
                 | {- empty -} { AbsAssignment.More_parameters2 }
 Basic_declaration :: { Basic_declaration }
-Basic_declaration : Ident Basic_array_dimensions ';' Type { AbsAssignment.Basic_declaration1 $1 $2 $4 }
+Basic_declaration : Ident Basic_array_dimensions ':' Type { AbsAssignment.Basic_declaration1 $1 $2 $4 }
 Basic_array_dimensions :: { Basic_array_dimensions }
 Basic_array_dimensions : '[' ']' Basic_array_dimensions { AbsAssignment.Basic_array_dimensions1 $3 }
                        | {- empty -} { AbsAssignment.Basic_array_dimensions2 }

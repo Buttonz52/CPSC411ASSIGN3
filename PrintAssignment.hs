@@ -111,7 +111,7 @@ instance Print Declaration where
 
 instance Print Var_declaration where
   prt i e = case e of
-    Var_declaration1 id arraydimensions type_ -> prPrec i 0 (concatD [doc (showString "var"), prt 0 id, prt 0 arraydimensions, doc (showString ";"), prt 0 type_])
+    Var_declaration1 id arraydimensions type_ -> prPrec i 0 (concatD [doc (showString "var"), prt 0 id, prt 0 arraydimensions, doc (showString ":"), prt 0 type_])
 
 instance Print Type where
   prt i e = case e of
@@ -126,7 +126,7 @@ instance Print Array_dimensions where
 
 instance Print Fun_declaration where
   prt i e = case e of
-    Fun_declaration1 id paramlist type_ funblock -> prPrec i 0 (concatD [doc (showString "fun"), prt 0 id, prt 0 paramlist, doc (showString ";"), prt 0 type_, doc (showString "{"), prt 0 funblock, doc (showString "}")])
+    Fun_declaration1 id paramlist type_ funblock -> prPrec i 0 (concatD [doc (showString "fun"), prt 0 id, prt 0 paramlist, doc (showString ":"), prt 0 type_, doc (showString "{"), prt 0 funblock, doc (showString "}")])
 
 instance Print Fun_block where
   prt i e = case e of
@@ -148,7 +148,7 @@ instance Print More_parameters where
 
 instance Print Basic_declaration where
   prt i e = case e of
-    Basic_declaration1 id basicarraydimensions type_ -> prPrec i 0 (concatD [prt 0 id, prt 0 basicarraydimensions, doc (showString ";"), prt 0 type_])
+    Basic_declaration1 id basicarraydimensions type_ -> prPrec i 0 (concatD [prt 0 id, prt 0 basicarraydimensions, doc (showString ":"), prt 0 type_])
 
 instance Print Basic_array_dimensions where
   prt i e = case e of

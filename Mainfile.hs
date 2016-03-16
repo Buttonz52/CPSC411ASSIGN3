@@ -1,19 +1,19 @@
-import LexExpr
-import ParExpr --import ExprMeta where
---import Language.LBNF.Compiletime
---import Language.LBNF.RunTime
-import SkelExpr
+module Main where
+
+import LexAssignment
+import ParAssignment 
+import SkelAssignment
 import ErrM
 import System.Environment
 
 main = do
-	args <- getArgs
-	conts <- readFile (args!!0)
-	let tokens = myLexer conts
-    ptree = pExpr tokens
-	case ptree of 
-	  Ok tree -> do
-	    let ast = transExpr tree
-		putStrLn $ show ast
-	  Bad msg -> putStrLn msg
-	putStrLn $ show ptree
+    args <- getArgs
+    let conts = args !! 0
+    fconts <- readFile conts
+    let tokens = myLexer conts
+    let ptree = pProg tokens
+    case ptree of 
+        Ok tree -> do
+            let ast = transProg tree
+            putStrLn $ show ast
+        Bad msg -> putStrLn msg

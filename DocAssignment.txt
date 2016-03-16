@@ -40,11 +40,12 @@ The reserved words used in Assignment3 are the following:
   | ``var`` | ``while`` |  | 
 
 The symbols used in Assignment3 are the following:
-  | ; | [ | ] | {
-  | } | ( | ) | ,
-  | := | || | && | =
-  | < | > | =< | >=
-  | + | - | * | /
+  | ; | : | [ | ]
+  | { | } | ( | )
+  | , | := | || | &&
+  | = | < | > | =<
+  | >= | + | - | *
+  | / |  |  | 
 
 ===Comments===
 Single-line comments begin with --.Multiple-line comments are  enclosed with {- and -}.
@@ -61,20 +62,20 @@ All other symbols are terminals.
   |  |  **|**  | **eps**
   | //Declaration// | -> | //Var_declaration// 
   |  |  **|**  | //Fun_declaration// 
-  | //Var_declaration// | -> | ``var`` //Ident// //Array_dimensions// ``;`` //Type// 
+  | //Var_declaration// | -> | ``var`` //Ident// //Array_dimensions// ``:`` //Type// 
   | //Type// | -> | ``int`` 
   |  |  **|**  | ``real`` 
   |  |  **|**  | ``bool`` 
   | //Array_dimensions// | -> | ``[`` //Expr// ``]`` //Array_dimensions// 
   |  |  **|**  | **eps**
-  | //Fun_declaration// | -> | ``fun`` //Ident// //Param_list// ``;`` //Type// ``{`` //Fun_block// ``}`` 
+  | //Fun_declaration// | -> | ``fun`` //Ident// //Param_list// ``:`` //Type// ``{`` //Fun_block// ``}`` 
   | //Fun_block// | -> | //Declarations// //Fun_body// 
   | //Param_list// | -> | ``(`` //Parameters// ``)`` 
   | //Parameters// | -> | //Basic_declaration// //More_parameters// 
   |  |  **|**  | **eps**
   | //More_parameters// | -> | ``,`` //Basic_declaration// //More_parameters// 
   |  |  **|**  | **eps**
-  | //Basic_declaration// | -> | //Ident// //Basic_array_dimensions// ``;`` //Type// 
+  | //Basic_declaration// | -> | //Ident// //Basic_array_dimensions// ``:`` //Type// 
   | //Basic_array_dimensions// | -> | ``[`` ``]`` //Basic_array_dimensions// 
   |  |  **|**  | **eps**
   | //Program_body// | -> | ``begin`` //Prog_stmts// ``end`` 
