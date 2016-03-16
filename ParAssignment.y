@@ -39,7 +39,7 @@ import ErrM
 %name pModifier_list Modifier_list
 %name pArguments Arguments
 %name pMore_arguments More_arguments
-%name pBval Bval
+%name pBVAL BVAL
 -- no lexer declaration
 %monad { Err } { thenM } { returnM }
 %tokentype {Token}
@@ -89,15 +89,15 @@ import ErrM
   '}' { PT _ (TS _ 43) }
 
 L_ident  { PT _ (TV $$) }
-L_Ival { PT _ (T_Ival $$) }
-L_Rval { PT _ (T_Rval $$) }
+L_IVAL { PT _ (T_IVAL $$) }
+L_RVAL { PT _ (T_RVAL $$) }
 
 
 %%
 
 Ident   :: { Ident }   : L_ident  { Ident $1 }
-Ival    :: { Ival} : L_Ival { Ival ($1)}
-Rval    :: { Rval} : L_Rval { Rval ($1)}
+IVAL    :: { IVAL} : L_IVAL { IVAL ($1)}
+RVAL    :: { RVAL} : L_RVAL { RVAL ($1)}
 
 Prog :: { Prog }
 Prog : Block { AbsAssignment.ProgBlock $1 }
@@ -184,9 +184,9 @@ Int_factor : '(' Expr ')' { AbsAssignment.Int_factor1 $2 }
            | 'floor' '(' Expr ')' { AbsAssignment.Int_factor4 $3 }
            | 'ceil' '(' Expr ')' { AbsAssignment.Int_factor5 $3 }
            | Ident Modifier_list { AbsAssignment.Int_factor6 $1 $2 }
-           | Ival { AbsAssignment.Int_factorIval $1 }
-           | Rval { AbsAssignment.Int_factorRval $1 }
-           | Bval { AbsAssignment.Int_factorBval $1 }
+           | IVAL { AbsAssignment.Int_factorIVAL $1 }
+           | RVAL { AbsAssignment.Int_factorRVAL $1 }
+           | BVAL { AbsAssignment.Int_factorBVAL $1 }
            | '-' Int_factor { AbsAssignment.Int_factor7 $2 }
 Modifier_list :: { Modifier_list }
 Modifier_list : '(' Arguments ')' { AbsAssignment.Modifier_list1 $2 }
@@ -197,9 +197,9 @@ Arguments : Expr More_arguments { AbsAssignment.Arguments1 $1 $2 }
 More_arguments :: { More_arguments }
 More_arguments : ',' Expr More_arguments { AbsAssignment.More_arguments1 $2 $3 }
                | {- empty -} { AbsAssignment.More_arguments2 }
-Bval :: { Bval }
-Bval : 'true' { AbsAssignment.Bval_true }
-     | 'false' { AbsAssignment.Bval_false }
+BVAL :: { BVAL }
+BVAL : 'true' { AbsAssignment.BVAL_true }
+     | 'false' { AbsAssignment.BVAL_false }
 {
 
 returnM :: a -> Err a

@@ -24,16 +24,16 @@ happyIn35 x = Happy_GHC_Exts.unsafeCoerce# x
 happyOut35 :: (HappyAbsSyn ) -> (Ident)
 happyOut35 x = Happy_GHC_Exts.unsafeCoerce# x
 {-# INLINE happyOut35 #-}
-happyIn36 :: (Ival) -> (HappyAbsSyn )
+happyIn36 :: (IVAL) -> (HappyAbsSyn )
 happyIn36 x = Happy_GHC_Exts.unsafeCoerce# x
 {-# INLINE happyIn36 #-}
-happyOut36 :: (HappyAbsSyn ) -> (Ival)
+happyOut36 :: (HappyAbsSyn ) -> (IVAL)
 happyOut36 x = Happy_GHC_Exts.unsafeCoerce# x
 {-# INLINE happyOut36 #-}
-happyIn37 :: (Rval) -> (HappyAbsSyn )
+happyIn37 :: (RVAL) -> (HappyAbsSyn )
 happyIn37 x = Happy_GHC_Exts.unsafeCoerce# x
 {-# INLINE happyIn37 #-}
-happyOut37 :: (HappyAbsSyn ) -> (Rval)
+happyOut37 :: (HappyAbsSyn ) -> (RVAL)
 happyOut37 x = Happy_GHC_Exts.unsafeCoerce# x
 {-# INLINE happyOut37 #-}
 happyIn38 :: (Prog) -> (HappyAbsSyn )
@@ -222,10 +222,10 @@ happyIn68 x = Happy_GHC_Exts.unsafeCoerce# x
 happyOut68 :: (HappyAbsSyn ) -> (More_arguments)
 happyOut68 x = Happy_GHC_Exts.unsafeCoerce# x
 {-# INLINE happyOut68 #-}
-happyIn69 :: (Bval) -> (HappyAbsSyn )
+happyIn69 :: (BVAL) -> (HappyAbsSyn )
 happyIn69 x = Happy_GHC_Exts.unsafeCoerce# x
 {-# INLINE happyIn69 #-}
-happyOut69 :: (HappyAbsSyn ) -> (Bval)
+happyOut69 :: (HappyAbsSyn ) -> (BVAL)
 happyOut69 x = Happy_GHC_Exts.unsafeCoerce# x
 {-# INLINE happyOut69 #-}
 happyInTok :: (Token) -> (HappyAbsSyn )
@@ -340,16 +340,16 @@ happyReduction_32 happy_x_1
 
 happyReduce_33 = happySpecReduce_1  1# happyReduction_33
 happyReduction_33 happy_x_1
-	 =  case happyOutTok happy_x_1 of { (PT _ (T_Ival happy_var_1)) -> 
+	 =  case happyOutTok happy_x_1 of { (PT _ (T_IVAL happy_var_1)) -> 
 	happyIn36
-		 (Ival (happy_var_1)
+		 (IVAL (happy_var_1)
 	)}
 
 happyReduce_34 = happySpecReduce_1  2# happyReduction_34
 happyReduction_34 happy_x_1
-	 =  case happyOutTok happy_x_1 of { (PT _ (T_Rval happy_var_1)) -> 
+	 =  case happyOutTok happy_x_1 of { (PT _ (T_RVAL happy_var_1)) -> 
 	happyIn37
-		 (Rval (happy_var_1)
+		 (RVAL (happy_var_1)
 	)}
 
 happyReduce_35 = happySpecReduce_1  3# happyReduction_35
@@ -865,21 +865,21 @@ happyReduce_94 = happySpecReduce_1  30# happyReduction_94
 happyReduction_94 happy_x_1
 	 =  case happyOut36 happy_x_1 of { happy_var_1 -> 
 	happyIn65
-		 (AbsAssignment.Int_factorIval happy_var_1
+		 (AbsAssignment.Int_factorIVAL happy_var_1
 	)}
 
 happyReduce_95 = happySpecReduce_1  30# happyReduction_95
 happyReduction_95 happy_x_1
 	 =  case happyOut37 happy_x_1 of { happy_var_1 -> 
 	happyIn65
-		 (AbsAssignment.Int_factorRval happy_var_1
+		 (AbsAssignment.Int_factorRVAL happy_var_1
 	)}
 
 happyReduce_96 = happySpecReduce_1  30# happyReduction_96
 happyReduction_96 happy_x_1
 	 =  case happyOut69 happy_x_1 of { happy_var_1 -> 
 	happyIn65
-		 (AbsAssignment.Int_factorBval happy_var_1
+		 (AbsAssignment.Int_factorBVAL happy_var_1
 	)}
 
 happyReduce_97 = happySpecReduce_2  30# happyReduction_97
@@ -938,13 +938,13 @@ happyReduction_103  =  happyIn68
 happyReduce_104 = happySpecReduce_1  34# happyReduction_104
 happyReduction_104 happy_x_1
 	 =  happyIn69
-		 (AbsAssignment.Bval_true
+		 (AbsAssignment.BVAL_true
 	)
 
 happyReduce_105 = happySpecReduce_1  34# happyReduction_105
 happyReduction_105 happy_x_1
 	 =  happyIn69
-		 (AbsAssignment.Bval_false
+		 (AbsAssignment.BVAL_false
 	)
 
 happyNewToken action sts stk [] =
@@ -997,8 +997,8 @@ happyNewToken action sts stk (tk:tks) =
 	PT _ (TS _ 42) -> cont 42#;
 	PT _ (TS _ 43) -> cont 43#;
 	PT _ (TV happy_dollar_dollar) -> cont 44#;
-	PT _ (T_Ival happy_dollar_dollar) -> cont 45#;
-	PT _ (T_Rval happy_dollar_dollar) -> cont 46#;
+	PT _ (T_IVAL happy_dollar_dollar) -> cont 45#;
+	PT _ (T_RVAL happy_dollar_dollar) -> cont 46#;
 	_ -> happyError' (tk:tks)
 	}
 
@@ -1108,7 +1108,7 @@ pArguments tks = happySomeParser where
 pMore_arguments tks = happySomeParser where
   happySomeParser = happyThen (happyParse 30# tks) (\x -> happyReturn (happyOut68 x))
 
-pBval tks = happySomeParser where
+pBVAL tks = happySomeParser where
   happySomeParser = happyThen (happyParse 31# tks) (\x -> happyReturn (happyOut69 x))
 
 happySeq = happyDontSeq

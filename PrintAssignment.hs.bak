@@ -126,7 +126,7 @@ instance Print Array_dimensions where
 
 instance Print Fun_declaration where
   prt i e = case e of
-    Fun_declaration1 id paramlist type_ funblock -> prPrec i 0 (concatD [doc (showString "fun"), prt 0 id, prt 0 paramlist, doc (showString ";"), prt 0 type_, doc (showString "{"), prt 0 funblock, doc (showString "}")])
+    Fun_declaration1 id paramlist type_ funblock -> prPrec i 0 (concatD [doc (showString "fun"), prt 0 id, prt 0 paramlist, doc (showString ":"), prt 0 type_, doc (showString "{"), prt 0 funblock, doc (showString "}")])
 
 instance Print Fun_block where
   prt i e = case e of

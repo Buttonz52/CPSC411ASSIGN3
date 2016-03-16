@@ -21,10 +21,10 @@ reserved words excluded.
 
 
 
-Ival literals are recognized by the regular expression
+IVAL literals are recognized by the regular expression
 `````digit+`````
 
-Rval literals are recognized by the regular expression
+RVAL literals are recognized by the regular expression
 `````digit* '.' digit+`````
 
 
@@ -115,9 +115,9 @@ All other symbols are terminals.
   |  |  **|**  | ``floor`` ``(`` //Expr// ``)`` 
   |  |  **|**  | ``ceil`` ``(`` //Expr// ``)`` 
   |  |  **|**  | //Ident// //Modifier_list// 
-  |  |  **|**  | //Ival// 
-  |  |  **|**  | //Rval// 
-  |  |  **|**  | //Bval// 
+  |  |  **|**  | //IVAL// 
+  |  |  **|**  | //RVAL// 
+  |  |  **|**  | //BVAL// 
   |  |  **|**  | ``-`` //Int_factor// 
   | //Modifier_list// | -> | ``(`` //Arguments// ``)`` 
   |  |  **|**  | //Array_dimensions// 
@@ -125,7 +125,7 @@ All other symbols are terminals.
   |  |  **|**  | **eps**
   | //More_arguments// | -> | ``,`` //Expr// //More_arguments// 
   |  |  **|**  | **eps**
-  | //Bval// | -> | ``true`` 
+  | //BVAL// | -> | ``true`` 
   |  |  **|**  | ``false`` 
 
 

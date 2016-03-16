@@ -68,7 +68,7 @@ All other symbols are terminals.
   |  |  **|**  | ``bool`` 
   | //Array_dimensions// | -> | ``[`` //Expr// ``]`` //Array_dimensions// 
   |  |  **|**  | **eps**
-  | //Fun_declaration// | -> | ``fun`` //Ident// //Param_list// ``;`` //Type// ``{`` //Fun_block// ``}`` 
+  | //Fun_declaration// | -> | ``fun`` //Ident// //Param_list// ``:`` //Type// ``{`` //Fun_block// ``}`` 
   | //Fun_block// | -> | //Declarations// //Fun_body// 
   | //Param_list// | -> | ``(`` //Parameters// ``)`` 
   | //Parameters// | -> | //Basic_declaration// //More_parameters// 

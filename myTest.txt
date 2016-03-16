@@ -1,1 +1,3 @@
-begin read b999 ; end
+begin
+
+end

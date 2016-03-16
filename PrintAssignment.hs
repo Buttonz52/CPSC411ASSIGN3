@@ -82,12 +82,12 @@ instance Print Ident where
   prt _ (Ident i) = doc (showString ( i))
 
 
-instance Print Ival where
-  prt _ (Ival i) = doc (showString ( i))
+instance Print IVAL where
+  prt _ (IVAL i) = doc (showString ( i))
 
 
-instance Print Rval where
-  prt _ (Rval i) = doc (showString ( i))
+instance Print RVAL where
+  prt _ (RVAL i) = doc (showString ( i))
 
 
 
@@ -233,9 +233,9 @@ instance Print Int_factor where
     Int_factor4 expr -> prPrec i 0 (concatD [doc (showString "floor"), doc (showString "("), prt 0 expr, doc (showString ")")])
     Int_factor5 expr -> prPrec i 0 (concatD [doc (showString "ceil"), doc (showString "("), prt 0 expr, doc (showString ")")])
     Int_factor6 id modifierlist -> prPrec i 0 (concatD [prt 0 id, prt 0 modifierlist])
-    Int_factorIval ival -> prPrec i 0 (concatD [prt 0 ival])
-    Int_factorRval rval -> prPrec i 0 (concatD [prt 0 rval])
-    Int_factorBval bval -> prPrec i 0 (concatD [prt 0 bval])
+    Int_factorIVAL ival -> prPrec i 0 (concatD [prt 0 ival])
+    Int_factorRVAL rval -> prPrec i 0 (concatD [prt 0 rval])
+    Int_factorBVAL bval -> prPrec i 0 (concatD [prt 0 bval])
     Int_factor7 intfactor -> prPrec i 0 (concatD [doc (showString "-"), prt 0 intfactor])
 
 instance Print Modifier_list where
@@ -253,9 +253,9 @@ instance Print More_arguments where
     More_arguments1 expr morearguments -> prPrec i 0 (concatD [doc (showString ","), prt 0 expr, prt 0 morearguments])
     More_arguments2 -> prPrec i 0 (concatD [])
 
-instance Print Bval where
+instance Print BVAL where
   prt i e = case e of
-    Bval_true -> prPrec i 0 (concatD [doc (showString "true")])
-    Bval_false -> prPrec i 0 (concatD [doc (showString "false")])
+    BVAL_true -> prPrec i 0 (concatD [doc (showString "true")])
+    BVAL_false -> prPrec i 0 (concatD [doc (showString "false")])
 
 

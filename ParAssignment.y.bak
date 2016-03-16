@@ -119,7 +119,7 @@ Array_dimensions :: { Array_dimensions }
 Array_dimensions : '[' Expr ']' Array_dimensions { AbsAssignment.Array_dimensions1 $2 $4 }
                  | {- empty -} { AbsAssignment.Array_dimensions2 }
 Fun_declaration :: { Fun_declaration }
-Fun_declaration : 'fun' Ident Param_list ';' Type '{' Fun_block '}' { AbsAssignment.Fun_declaration1 $2 $3 $5 $7 }
+Fun_declaration : 'fun' Ident Param_list ':' Type '{' Fun_block '}' { AbsAssignment.Fun_declaration1 $2 $3 $5 $7 }
 Fun_block :: { Fun_block }
 Fun_block : Declarations Fun_body { AbsAssignment.Fun_block1 $1 $2 }
 Param_list :: { Param_list }

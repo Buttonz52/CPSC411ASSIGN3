@@ -29,8 +29,8 @@ $u = [\0-\255]          -- universal: any character
 
 $white+ ;
 @rsyms { tok (\p s -> PT p (eitherResIdent (TV . share) s)) }
-$d + { tok (\p s -> PT p (eitherResIdent (T_Ival . share) s)) }
-$d * \. $d + { tok (\p s -> PT p (eitherResIdent (T_Rval . share) s)) }
+$d + { tok (\p s -> PT p (eitherResIdent (T_IVAL . share) s)) }
+$d * \. $d + { tok (\p s -> PT p (eitherResIdent (T_RVAL . share) s)) }
 
 $l $i*   { tok (\p s -> PT p (eitherResIdent (TV . share) s)) }
 
@@ -53,8 +53,8 @@ data Tok =
  | TV !String         -- identifiers
  | TD !String         -- double precision float literals
  | TC !String         -- character literals
- | T_Ival !String
- | T_Rval !String
+ | T_IVAL !String
+ | T_RVAL !String
 
  deriving (Eq,Show,Ord)
 
@@ -89,8 +89,8 @@ prToken t = case t of
   PT _ (TV s)   -> s
   PT _ (TD s)   -> s
   PT _ (TC s)   -> s
-  PT _ (T_Ival s) -> s
-  PT _ (T_Rval s) -> s
+  PT _ (T_IVAL s) -> s
+  PT _ (T_RVAL s) -> s
 
 
 data BTree = N | B String Tok BTree BTree deriving (Show)

@@ -13,12 +13,12 @@ failure x = Bad $ "Undefined case: " ++ show x
 transIdent :: Ident -> Result
 transIdent x = case x of
   Ident string -> failure x
-transIval :: Ival -> Result
-transIval x = case x of
-  Ival string -> failure x
-transRval :: Rval -> Result
-transRval x = case x of
-  Rval string -> failure x
+transIVAL :: IVAL -> Result
+transIVAL x = case x of
+  IVAL string -> failure x
+transRVAL :: RVAL -> Result
+transRVAL x = case x of
+  RVAL string -> failure x
 transProg :: Prog -> Result
 transProg x = case x of
   ProgBlock block -> failure x
@@ -134,9 +134,9 @@ transInt_factor x = case x of
   Int_factor4 expr -> failure x
   Int_factor5 expr -> failure x
   Int_factor6 ident modifierlist -> failure x
-  Int_factorIval ival -> failure x
-  Int_factorRval rval -> failure x
-  Int_factorBval bval -> failure x
+  Int_factorIVAL ival -> failure x
+  Int_factorRVAL rval -> failure x
+  Int_factorBVAL bval -> failure x
   Int_factor7 intfactor -> failure x
 transModifier_list :: Modifier_list -> Result
 transModifier_list x = case x of
@@ -150,8 +150,8 @@ transMore_arguments :: More_arguments -> Result
 transMore_arguments x = case x of
   More_arguments1 expr morearguments -> failure x
   More_arguments2 -> failure x
-transBval :: Bval -> Result
-transBval x = case x of
-  Bval_true -> failure x
-  Bval_false -> failure x
+transBVAL :: BVAL -> Result
+transBVAL x = case x of
+  BVAL_true -> failure x
+  BVAL_false -> failure x
 

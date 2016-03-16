@@ -8,8 +8,8 @@ module AbsAssignment where
 
 
 newtype Ident = Ident String deriving (Eq, Ord, Show, Read)
-newtype Ival = Ival String deriving (Eq, Ord, Show, Read)
-newtype Rval = Rval String deriving (Eq, Ord, Show, Read)
+newtype IVAL = IVAL String deriving (Eq, Ord, Show, Read)
+newtype RVAL = RVAL String deriving (Eq, Ord, Show, Read)
 data Prog = ProgBlock Block
   deriving (Eq, Ord, Show, Read)
 
@@ -128,9 +128,9 @@ data Int_factor
     | Int_factor4 Expr
     | Int_factor5 Expr
     | Int_factor6 Ident Modifier_list
-    | Int_factorIval Ival
-    | Int_factorRval Rval
-    | Int_factorBval Bval
+    | Int_factorIVAL IVAL
+    | Int_factorRVAL RVAL
+    | Int_factorBVAL BVAL
     | Int_factor7 Int_factor
   deriving (Eq, Ord, Show, Read)
 
@@ -146,6 +146,6 @@ data More_arguments
     = More_arguments1 Expr More_arguments | More_arguments2
   deriving (Eq, Ord, Show, Read)
 
-data Bval = Bval_true | Bval_false
+data BVAL = BVAL_true | BVAL_false
   deriving (Eq, Ord, Show, Read)
 
