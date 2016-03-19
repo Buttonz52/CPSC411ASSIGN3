@@ -4,153 +4,191 @@ module SkelAssignment where
 
 import AbsAssignment
 import ErrM
+import AST
 type Result = Err String
 
 failure :: Show a => a -> Result
 failure x = Bad $ "Undefined case: " ++ show x
 
-transIdent :: Ident -> Result
+transIdent :: Ident -> String
 transIdent x = case x of
-  Ident string -> failure x
-transIVAL :: IVAL -> Result
-transIVAL x = case x of
-  IVAL string -> failure x
-transRVAL :: RVAL -> Result
-transRVAL x = case x of
-  RVAL string -> failure x
-transProg :: Prog -> Result
+  Ident s -> s
+    
+transProg :: Prog -> M_prog
 transProg x = case x of
-  ProgBlock block -> failure x
-transBlock :: Block -> Result
+  ProgBlock b -> M_prog (transBlock b)
+  
+transBlock :: Block -> ([M_decl],[M_stmt])
 transBlock x = case x of
-  Block1 declarations programbody -> failure x
-transDeclarations :: Declarations -> Result
+  Block1 d p -> (transDeclarations d, transProgram_body p)
+
+transDeclarations :: Declarations -> [M_decl]
 transDeclarations x = case x of
-  Declarations1 declaration declarations -> failure x
-  Declarations2 -> failure x
-transDeclaration :: Declaration -> Result
+  Declarations1 d ds -> (transDeclaration d):(transDeclarations ds)
+  Declarations2 -> []
+
+transDeclaration :: Declaration -> M_decl
 transDeclaration x = case x of
-  DeclarationVar_declaration vardeclaration -> failure x
-  DeclarationFun_declaration fundeclaration -> failure x
-transVar_declaration :: Var_declaration -> Result
+  DeclarationVar_declaration vd -> transVar_declaration vd
+  DeclarationFun_declaration fd -> transFun_declaration fd
+  
+transVar_declaration :: Var_declaration -> M_decl
 transVar_declaration x = case x of
-  Var_declaration1 ident arraydimensions type_ -> failure x
-transType :: Type -> Result
+  Var_declaration1 i ad t -> M_var (transIdent i, transArray_dimensions ad, transType t)
+  
+transType :: Type -> M_type
 transType x = case x of
-  Type_int -> failure x
-  Type_real -> failure x
-  Type_bool -> failure x
-transArray_dimensions :: Array_dimensions -> Result
+  Type_int -> M_int
+  Type_real -> M_bool
+  Type_bool -> M_real
+  
+transArray_dimensions :: Array_dimensions -> [M_expr]
 transArray_dimensions x = case x of
-  Array_dimensions1 expr arraydimensions -> failure x
-  Array_dimensions2 -> failure x
-transFun_declaration :: Fun_declaration -> Result
+  Array_dimensions1 e ad -> (transExpr e):(transArray_dimensions ad)
+  Array_dimensions2 -> []
+  
+transFun_declaration :: Fun_declaration -> M_decl
 transFun_declaration x = case x of
-  Fun_declaration1 ident paramlist type_ funblock -> failure x
-transFun_block :: Fun_block -> Result
+  Fun_declaration1 i pl t fb -> M_fun (transIdent i, transParam_list pl, transType t, fb_decl,  fb_stmt)
+    where
+       (fb_decl, fb_stmt) = transFun_block fb
+       
+transFun_block :: Fun_block -> ([M_decl],[M_stmt])
 transFun_block x = case x of
-  Fun_block1 declarations funbody -> failure x
-transParam_list :: Param_list -> Result
+  Fun_block1 d fb -> (transDeclarations d, transFun_body fb)
+  
+transParam_list :: Param_list -> [(String,Int,M_type)]
 transParam_list x = case x of
-  Param_list1 parameters -> failure x
-transParameters :: Parameters -> Result
+  Param_list1 p -> transParameters p
+  
+transParameters :: Parameters -> [(String,Int,M_type)]
 transParameters x = case x of
-  Parameters1 basicdeclaration moreparameters -> failure x
-  Parameters2 -> failure x
-transMore_parameters :: More_parameters -> Result
+  Parameters1 bd mp -> (transBasic_declaration bd):(transMore_parameters mp)
+  Parameters2 -> []
+  
+transMore_parameters :: More_parameters -> [(String,Int,M_type)]
 transMore_parameters x = case x of
-  More_parameters1 basicdeclaration moreparameters -> failure x
-  More_parameters2 -> failure x
-transBasic_declaration :: Basic_declaration -> Result
+  More_parameters1 bd mp -> (transBasic_declaration bd):(transMore_parameters mp)
+  More_parameters2 -> []
+  
+transBasic_declaration :: Basic_declaration -> (String,Int,M_type)
 transBasic_declaration x = case x of
-  Basic_declaration1 ident basicarraydimensions type_ -> failure x
-transBasic_array_dimensions :: Basic_array_dimensions -> Result
+  Basic_declaration1 i bad t -> (transIdent i, transBasic_array_dimensions bad, transType t)
+  
+transBasic_array_dimensions :: Basic_array_dimensions -> Int
 transBasic_array_dimensions x = case x of
-  Basic_array_dimensions1 basicarraydimensions -> failure x
-  Basic_array_dimensions2 -> failure x
-transProgram_body :: Program_body -> Result
+  Basic_array_dimensions1 bad -> (transBasic_array_dimensions bad) + 1
+  Basic_array_dimensions2 -> 0
+  
+transProgram_body :: Program_body -> [M_stmt]
 transProgram_body x = case x of
-  Program_body1 progstmts -> failure x
-transFun_body :: Fun_body -> Result
+  Program_body1 pss -> transProg_stmts pss
+  
+transFun_body :: Fun_body -> [M_stmt]
 transFun_body x = case x of
-  Fun_body1 progstmts expr -> failure x
-transProg_stmts :: Prog_stmts -> Result
+  Fun_body1 pss e -> (transProg_stmts pss) ++ [M_return (transExpr e)]
+  
+transProg_stmts :: Prog_stmts -> [M_stmt]
 transProg_stmts x = case x of
-  Prog_stmts1 progstmt progstmts -> failure x
-  Prog_stmts2 -> failure x
-transProg_stmt :: Prog_stmt -> Result
+  Prog_stmts1 ps pss -> (transProg_stmt ps):(transProg_stmts pss)
+  Prog_stmts2 -> []
+  
+transProg_stmt :: Prog_stmt -> M_stmt
 transProg_stmt x = case x of
-  Prog_stmt1 expr progstmt1 progstmt2 -> failure x
-  Prog_stmt2 expr progstmt -> failure x
-  Prog_stmt3 identifier -> failure x
-  Prog_stmt4 identifier expr -> failure x
-  Prog_stmt5 expr -> failure x
-  Prog_stmt6 block -> failure x
-transIdentifier :: Identifier -> Result
+  Prog_stmt1 e ps1 ps2 -> M_cond (transExpr e, transProg_stmt ps1, transProg_stmt ps2)
+  Prog_stmt2 e ps -> M_while (transExpr e, transProg_stmt ps)
+  Prog_stmt3 i -> M_read (transIdentifier i)
+  Prog_stmt4 i e -> M_ass (i_String, i_M_expr, transExpr e)
+        where (i_String, i_M_expr) = transIdentifier i
+  Prog_stmt5 e -> M_print (transExpr e)
+  Prog_stmt6 b -> M_block (transBlock b)
+  
+transIdentifier :: Identifier -> (String,[M_expr])
 transIdentifier x = case x of
-  Identifier1 ident arraydimensions -> failure x
-transExpr :: Expr -> Result
+  Identifier1 i ad -> (transIdent i, transArray_dimensions ad)
+  
+transExpr :: Expr -> M_expr
 transExpr x = case x of
-  Expr1 expr bintterm -> failure x
-  ExprBint_term bintterm -> failure x
-transBint_term :: Bint_term -> Result
+  Expr1 e bt -> M_app (M_or, (transExpr e):[transBint_term bt])
+  ExprBint_term bit -> transBint_term bit
+  
+transBint_term :: Bint_term -> M_expr
 transBint_term x = case x of
-  Bint_term1 bintterm bintfactor -> failure x
-  Bint_termBint_factor bintfactor -> failure x
-transBint_factor :: Bint_factor -> Result
+  Bint_term1 bit bif -> M_app (M_and, (transBint_term bit):[transBint_factor bif])
+  Bint_termBint_factor bif -> transBint_factor bif
+  
+transBint_factor :: Bint_factor -> M_expr
 transBint_factor x = case x of
-  Bint_factor1 bintfactor -> failure x
-  Bint_factor2 intexpr1 compareop intexpr2 -> failure x
-  Bint_factorInt_expr intexpr -> failure x
-transCompare_op :: Compare_op -> Result
+  Bint_factor1 bf -> transBint_factor bf
+  Bint_factor2 ie1 co ie2 -> M_app(transCompare_op co, (transInt_expr ie1):[transInt_expr ie2]) 
+  Bint_factorInt_expr ie -> transInt_expr ie
+  
+transCompare_op :: Compare_op -> M_operation
 transCompare_op x = case x of
-  Compare_op1 -> failure x
-  Compare_op2 -> failure x
-  Compare_op3 -> failure x
-  Compare_op4 -> failure x
-  Compare_op5 -> failure x
-transInt_expr :: Int_expr -> Result
+  Compare_op1 -> M_eq
+  Compare_op2 -> M_lt
+  Compare_op3 -> M_gt
+  Compare_op4 -> M_le
+  Compare_op5 -> M_ge
+  
+transInt_expr :: Int_expr -> M_expr
 transInt_expr x = case x of
-  Int_expr1 intexpr addop intterm -> failure x
-  Int_exprInt_term intterm -> failure x
-transAddop :: Addop -> Result
+  Int_expr1 ie ao it -> M_app(transAddop ao,(transInt_expr ie):[transInt_term it]) 
+  Int_exprInt_term it -> transInt_term it
+  
+transAddop :: Addop -> M_operation
 transAddop x = case x of
-  Addop1 -> failure x
-  Addop2 -> failure x
-transInt_term :: Int_term -> Result
+  Addop1 -> M_add
+  Addop2 -> M_sub
+  
+transInt_term :: Int_term -> M_expr
 transInt_term x = case x of
-  Int_term1 intterm mulop intfactor -> failure x
-  Int_termInt_factor intfactor -> failure x
-transMulop :: Mulop -> Result
+  Int_term1 it mo intf -> M_app (transMulop mo,(transInt_term it):[transInt_factor intf])
+  Int_termInt_factor intf -> transInt_factor intf
+  
+transMulop :: Mulop -> M_operation
 transMulop x = case x of
-  Mulop1 -> failure x
-  Mulop2 -> failure x
-transInt_factor :: Int_factor -> Result
+  Mulop1 -> M_mul
+  Mulop2 -> M_div
+  
+transInt_factor :: Int_factor -> M_expr
 transInt_factor x = case x of
-  Int_factor1 expr -> failure x
-  Int_factor2 ident basicarraydimensions -> failure x
-  Int_factor3 expr -> failure x
-  Int_factor4 expr -> failure x
-  Int_factor5 expr -> failure x
-  Int_factor6 ident modifierlist -> failure x
-  Int_factorIVAL ival -> failure x
-  Int_factorRVAL rval -> failure x
-  Int_factorBVAL bval -> failure x
-  Int_factor7 intfactor -> failure x
-transModifier_list :: Modifier_list -> Result
+  Int_factor1 e -> transExpr e
+  Int_factor2 i bad -> M_size(transIdent i, transBasic_array_dimensions bad)
+  Int_factor3 e -> M_app(M_float, [transExpr e])
+  Int_factor4 e -> M_app(M_floor, [transExpr e])
+  Int_factor5 e -> M_app(M_ceil, [transExpr e])
+  Int_factor6 i ml -> M_id(transIdent i, transModifier_list ml)--fix??
+  Int_factorIVAL ival -> transIVAL ival
+  Int_factorRVAL rval -> transRVAL rval
+  Int_factorBVAL bval -> transBVAL bval
+  Int_factor7 intf -> M_app(M_neg, [transInt_factor intf])
+  
+transModifier_list :: Modifier_list -> [M_expr]
 transModifier_list x = case x of
-  Modifier_list1 arguments -> failure x
-  Modifier_listArray_dimensions arraydimensions -> failure x
-transArguments :: Arguments -> Result
+  Modifier_list1 arg -> transArguments arg
+  Modifier_listArray_dimensions ad -> transArray_dimensions ad
+  
+transArguments :: Arguments -> [M_expr]
 transArguments x = case x of
-  Arguments1 expr morearguments -> failure x
-  Arguments2 -> failure x
-transMore_arguments :: More_arguments -> Result
+  Arguments1 e ma -> (transExpr e):(transMore_arguments ma)
+  Arguments2 -> []
+  
+transMore_arguments :: More_arguments -> [M_expr]
 transMore_arguments x = case x of
-  More_arguments1 expr morearguments -> failure x
-  More_arguments2 -> failure x
-transBVAL :: BVAL -> Result
+  More_arguments1 e ma -> (transExpr e):(transMore_arguments ma)
+  More_arguments2 -> []
+
+transIVAL :: IVAL -> M_expr
+transIVAL x = case x of
+  IVAL string -> M_ival (read string)
+  
+transRVAL :: RVAL -> M_expr
+transRVAL x = case x of
+  RVAL string -> M_rval (read string)
+  
+transBVAL :: BVAL -> M_expr
 transBVAL x = case x of
-  BVAL_true -> failure x
-  BVAL_false -> failure x
+  BVAL_true -> M_bval True
+  BVAL_false -> M_bval False
 

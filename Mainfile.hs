@@ -6,6 +6,7 @@ import ErrM
 import SkelAssignment
 
 import System.Environment
+import Text.Show.Pretty
 
 main = do
     args <- getArgs
@@ -16,5 +17,6 @@ main = do
     case ptree of 
         Ok tree -> do
             let ast = transProg tree
-            putStrLn $ show ast
+            --putStrLn $ show ast
+            putStrLn $ ppShow ast
         Bad msg -> putStrLn msg
