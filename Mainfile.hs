@@ -10,8 +10,7 @@ import Text.Show.Pretty
 
 main = do
     args <- getArgs
-    let fname = args !! 0
-    conts <- readFile fname
+    conts <- readFile (args !! 0)
     let tokens = myLexer conts
     let ptree = pProg tokens
     case ptree of 

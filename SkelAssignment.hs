@@ -119,7 +119,7 @@ transBint_term x = case x of
   
 transBint_factor :: Bint_factor -> M_expr
 transBint_factor x = case x of
-  Bint_factor1 bf -> transBint_factor bf
+  Bint_factor1 bf -> M_app (M_not, [transBint_factor bf])
   Bint_factor2 ie1 co ie2 -> M_app(transCompare_op co, (transInt_expr ie1):[transInt_expr ie2]) 
   Bint_factorInt_expr ie -> transInt_expr ie
   
@@ -158,7 +158,9 @@ transInt_factor x = case x of
   Int_factor3 e -> M_app(M_float, [transExpr e])
   Int_factor4 e -> M_app(M_floor, [transExpr e])
   Int_factor5 e -> M_app(M_ceil, [transExpr e])
-  Int_factor6 i ml -> M_id(transIdent i, transModifier_list ml)--fix??
+  Int_factor6 i ml -> case ml of
+	Modifier_list1 arg -> M_app(M_fn(transIdent i), (transModifier_list ml) ++ (transArguments arg))
+	Modifier_listArray_dimensions ad -> M_id((transIdent i), (transModifier_list ml)++(transArray_dimensions ad))
   Int_factorIVAL ival -> transIVAL ival
   Int_factorRVAL rval -> transRVAL rval
   Int_factorBVAL bval -> transBVAL bval
